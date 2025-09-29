@@ -1,0 +1,83 @@
+﻿@page "/register"
+@using System.Text.RegularExpressions
+@attribute [AllowAnonymous]
+@inject HttpClient _http
+@inject NavigationManager _nav
+@inject AuthenticationStateProvider _authStateProvider
+@inject ISnackbar _snack
+
+<PageTitle>Register</PageTitle>
+<MudGrid Class="justify-center">
+    <MudItem xs="3">
+        <h1>Register</h1>
+        <MudPaper Class="pa-4">
+            <MudForm @bind-IsValid="@formValid" @bind-Errors="@errors">
+                <MudTextField @bind-Text="username" T="string" Label="Username" Required="true" RequiredError="Username is required!" />
+                <MudTextField @bind-Text="email" T="string" Label="Email" Required="true" RequiredError="Email is required!"
+                              Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})" />
+                <MudTextField @bind-Text="password" T="string" Label="Password" HelperText="Choose a strong password" @ref="pwField1"
+                              InputType="InputType.Password"
+                              Validation="@(new Func<string, IEnumerable<string>>(PasswordStrength))" Required="true"
+                              RequiredError="Password is required!" />
+                <MudTextField T="string"
+                              Label="Password" HelperText="Repeat the password" InputType="InputType.Password"
+                              Validation="@(new Func<string, string>(PasswordMatch))" />
+                <div class="d-flex align-center justify-space-between">
+                    <MudCheckBox T="bool" Required="true" RequiredError="You must agree" Label="I agree!" />
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!formValid)" Class="ml-auto" OnClick="@(() => RegisterUser())">Register</MudButton>
+                </div>
+            </MudForm>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+@code {
+    bool formValid;
+    string[] errors = { };
+    MudTextField<string> pwField1;
+
+    private string email = "";
+    private string username = "";
+    private string password = "";
+    private string errorMessage = "";
+
+    private async Task RegisterUser()
+    {
+        var customAuthProvider = ((ApiAuthenticationStateProvider)_authStateProvider);
+        var result = await customAuthProvider.RegiserAsync(username, email, password);
+        if (result)
+        {
+            customAuthProvider.NotifyChange();
+            _snack.Add("Registration successful.", Severity.Success);
+            _nav.NavigateTo("/");
+        }
+        else
+        {
+            _snack.Add("Registration failed.", Severity.Error);
+        }
+    }
+
+
+    private IEnumerable<string> PasswordStrength(string pw)
+    {
+        if (string.IsNullOrWhiteSpace(pw))
+        {
+            yield return "Password is required!";
+            yield break;
+        }
+        if (pw.Length < 8)
+            yield return "Password must be at least of length 8";
+        if (!Regex.IsMatch(pw, @"[A-Z]"))
+            yield return "Password must contain at least one capital letter";
+        if (!Regex.IsMatch(pw, @"[a-z]"))
+            yield return "Password must contain at least one lowercase letter";
+        if (!Regex.IsMatch(pw, @"[0-9]"))
+            yield return "Password must contain at least one digit";
+    }
+
+    private string PasswordMatch(string arg)
+    {
+        if (pwField1.Value != arg)
+            return "Passwords don't match";
+        return null;
+    }
+}

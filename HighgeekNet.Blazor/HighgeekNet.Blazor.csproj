@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+	  <!--Microsoft-->
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="9.*" />
+  </ItemGroup>
+	<ItemGroup>
+		<!--Project-->
+		<ProjectReference Include="..\HighgeekNet.Blazor.Client\HighgeekNet.Blazor.Client.csproj" />
+		<ProjectReference Include="..\HighgeekNet.Common.Server\HighgeekNet.Common.Server.csproj" />
+	</ItemGroup>
+
+</Project>

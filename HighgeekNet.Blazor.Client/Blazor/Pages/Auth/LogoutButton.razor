@@ -1,0 +1,24 @@
+﻿@inject AuthenticationStateProvider _authStateProvider
+@inject HttpClient _http
+@inject NavigationManager _nav
+@inject ISnackbar _snack
+<button @onclick="Logout">Logout</button>
+
+@code {
+
+    private async Task Logout()
+    {
+        var customAuthProvider = ((ApiAuthenticationStateProvider)_authStateProvider);
+        var result = await customAuthProvider.LogoutAsync();
+        if (result)
+        {
+            customAuthProvider.NotifyChange();
+            _snack.Add("Logout successful.", Severity.Success);
+            _nav.NavigateTo("/");
+        }
+        else
+        {
+            _snack.Add("Registration failed.", Severity.Error);
+        }
+    }
+}

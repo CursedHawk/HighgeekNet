@@ -1,0 +1,53 @@
+﻿@page "/login"
+@inject HttpClient _http
+@inject NavigationManager _nav
+@attribute [AllowAnonymous]
+@inject AuthenticationStateProvider _authStateProvider
+@inject ISnackbar _snack
+
+<PageTitle>Login</PageTitle>
+<MudGrid Class="justify-center">
+    <MudItem xs="3">
+        <h1>Login</h1>
+        <MudPaper Class="pa-4">
+            <MudForm @bind-IsValid="@success" @bind-Errors="@errors">
+                <MudTextField @bind-Value="username" T="string" Label="Username" Required="true" RequiredError="Username is required!" />
+                <MudTextField @bind-Value="password" T="string" Label="Password"
+                              InputType="InputType.Password" Required="true" RequiredError="Password is required!" />
+                <div class="d-flex align-center justify-space-between">
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" DropShadow="false" OnClick="@(() => LoginUser())">Login</MudButton>
+                </div>
+            </MudForm>
+
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <MudText Color="Color.Error">@errorMessage</MudText>
+            }
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+@code {
+
+    bool success;
+    string[] errors = { };
+    string errorMessage;
+    string username;
+    string password;
+
+    private async Task LoginUser()
+    {
+        var customAuthProvider = ((ApiAuthenticationStateProvider)_authStateProvider);
+        var result = await customAuthProvider.LoginAsync(username, password);
+        if (result)
+        {
+            customAuthProvider.NotifyChange();
+            _snack.Add("Login successful.", Severity.Success);
+            _nav.NavigateTo("/");
+        }
+        else
+        {
+            _snack.Add("Invalid login attempt.", Severity.Error);
+        }
+    }
+}

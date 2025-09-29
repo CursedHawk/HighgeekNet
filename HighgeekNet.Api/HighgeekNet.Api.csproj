@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<!--Microsoft-->
+		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.9" />
+	</ItemGroup>
+	<ItemGroup>
+		<!--ThirdParty-->
+	</ItemGroup>
+	<ItemGroup>
+		<!--Project-->
+		<ProjectReference Include="..\HighgeekNet.Common.Server\HighgeekNet.Common.Server.csproj" />
+	</ItemGroup>
+
+</Project>
