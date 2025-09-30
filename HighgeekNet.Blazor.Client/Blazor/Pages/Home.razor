@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using HighgeekNet.Blazor.Client.Auth
 
 <PageTitle>Home</PageTitle>
 
@@ -57,3 +58,14 @@
         More details
     </MudLink>
 </MudText>
+<PermissionAuthorizeView Permission="asd">
+    <Authorized>
+        <h3>Welcome, Admin!</h3>
+    </Authorized>
+    <NotAuthorized>
+        <h3>You do not have access.</h3>
+    </NotAuthorized>
+    <Loading>
+        <p>Loading authentication...</p>
+    </Loading>
+</PermissionAuthorizeView>

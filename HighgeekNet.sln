@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HighgeekNet.Common.Server",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HighgeekNet.Api", "HighgeekNet.Api\HighgeekNet.Api.csproj", "{94A98890-0291-43AD-8E3A-80BAF7F4A2FC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HighgeekNet.Common", "HighgeekNet.Common\HighgeekNet.Common.csproj", "{9F23DC42-5609-4A24-B464-DE746ACDDEAF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{94A98890-0291-43AD-8E3A-80BAF7F4A2FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{94A98890-0291-43AD-8E3A-80BAF7F4A2FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{94A98890-0291-43AD-8E3A-80BAF7F4A2FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F23DC42-5609-4A24-B464-DE746ACDDEAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F23DC42-5609-4A24-B464-DE746ACDDEAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F23DC42-5609-4A24-B464-DE746ACDDEAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F23DC42-5609-4A24-B464-DE746ACDDEAF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

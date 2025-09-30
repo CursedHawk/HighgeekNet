@@ -1,8 +1,12 @@
+using HighgeekNet.Blazor.Client.Services.Authorization;
 using HighgeekNet.Blazor.Components;
+using HighgeekNet.Common.Permissions;
 using HighgeekNet.Common.Server.Config;
 using HighgeekNet.Common.Server.Data.Contexts;
 using HighgeekNet.Common.Server.Data.Models.mcwebapp_application;
 using HighgeekNet.Common.Server.Identity;
+using HighgeekNet.Common.Server.Permissions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -10,9 +14,6 @@ using MudBlazor.Services;
 
 namespace HighgeekNet.Blazor
 {
-    public record LoginDto(string Email, string Password);
-    public record RegisterDto(string Email, string Password, string Username);
-
     public class Program
     {
         public static void Main(string[] args)
@@ -61,6 +62,8 @@ namespace HighgeekNet.Blazor
                 .AddCookie(IdentityConstants.ApplicationScheme,
         options =>
         {
+            options.LoginPath = "/login";
+            options.LogoutPath = "/logout";
             options.Cookie.Name = ".AspNet.SharedCookie";
 
             if (builder.Environment.IsProduction())
@@ -70,12 +73,26 @@ namespace HighgeekNet.Blazor
 
         });
 
+            builder.Services.AddSingleton<LuckPermsService>();
 
-            builder.Services.AddAuthorization();
+            builder.Services.AddScoped<IAuthorizationHandler, ServerPermissionsAuthorizationHandler>();
+            builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionsPolicyProvider>();
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("group.sa", policy => policy.Requirements.Add(new PermissionsAuthorizeAttribute("group.sa")));
+                options.AddPolicy("group.default", policy => policy.Requirements.Add(new PermissionsAuthorizeAttribute("group.default")));
+                options.AddPolicy("connectedaccount", policy => policy.Requirements.Add(new PermissionsAuthorizeAttribute("connectedaccount")));
+            });
+
             //builder.Services.AddAuthorizationBuilder();
+            builder.Services.AddAntiforgery(options =>
+            {
+                options.HeaderName = "X-CSRF-TOKEN";
+            });
 
 
             var app = builder.Build();
+
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -95,13 +112,15 @@ namespace HighgeekNet.Blazor
             app.UseAuthorization();
             app.UseAntiforgery();
 
+            app.UseRequestAntiforgery();
+            app.UseIdentityEndpoints();
+
             app.MapStaticAssets();
             app.MapRazorComponents<App>()
                 .AddInteractiveServerRenderMode()
                 .AddInteractiveWebAssemblyRenderMode()
                 .AddAdditionalAssemblies(typeof(Client._Imports).Assembly);
 
-            app.UseIdentityEndpoints();
 
             app.Run();
         }

@@ -1,0 +1,46 @@
+﻿@using HighgeekNet.Common.Permissions
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IAuthorizationService _authorizationService
+
+@if (IsAuthorized == null)
+{
+    @Loading
+}
+else if (IsAuthorized == true)
+{
+    @Authorized
+}
+else
+{
+    @NotAuthorized
+}
+
+@code {
+    [Parameter] public RenderFragment? Authorized { get; set; }
+    [Parameter] public RenderFragment? NotAuthorized { get; set; }
+    [Parameter] public RenderFragment? Loading { get; set; }
+    [Parameter] public string? Permission { get; set; }
+
+    private bool? IsAuthorized;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var authState = await ((ApiAuthenticationStateProvider) AuthenticationStateProvider).GetAuthenticationStateAsync();
+        var user = authState.User;
+        if (user?.Identity?.IsAuthenticated != true)
+        {
+            IsAuthorized = false;
+            return;
+        }
+
+        if (!string.IsNullOrEmpty(Permission))
+        {
+            var res = await _authorizationService.AuthorizeAsync(user, null, new PermissionsAuthorizeAttribute(Permission));
+            IsAuthorized = res.Succeeded;
+            return;
+        }
+        IsAuthorized = false;
+    }
+}

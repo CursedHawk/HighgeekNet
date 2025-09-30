@@ -1,14 +1,15 @@
 ﻿@using HighgeekNet.Blazor.Client
 @using HighgeekNet.Blazor.Client.Blazor.Pages.Auth
 @using Microsoft.AspNetCore.Components.Authorization
-
-<Router AppAssembly="typeof(Program).Assembly">
-    <Found Context="routeData">
-        <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(Client.Blazor.Layout.MainLayout)">
-            <NotAuthorized>
-                <RedirectToLogin />
-            </NotAuthorized>
-        </AuthorizeRouteView>
-        <FocusOnNavigate RouteData="routeData" Selector="h1" />
-    </Found>
-</Router>
+<CascadingAuthenticationState>
+    <Router AppAssembly="typeof(Program).Assembly">
+        <Found Context="routeData">
+            <HighgeekNet.Blazor.Client.Auth.PermisssionAuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(Client.Blazor.Layout.MainLayout)">
+                <NotAuthorized>
+                    <RedirectToLogin />
+                </NotAuthorized>
+            </HighgeekNet.Blazor.Client.Auth.PermisssionAuthorizeRouteView>
+            <FocusOnNavigate RouteData="routeData" Selector="h1" />
+        </Found>
+    </Router>
+</CascadingAuthenticationState>

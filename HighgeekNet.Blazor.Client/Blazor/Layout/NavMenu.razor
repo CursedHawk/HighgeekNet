@@ -6,7 +6,7 @@
     <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
     
     <AuthorizeView>
-        <Authorized>
+        <Authorized >
             <MudNavLink Href="Account/Manage" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Person">@context.User.Identity?.Name</MudNavLink>
             <HighgeekNet.Blazor.Client.Blazor.Pages.Auth.LogoutButton/>
         </Authorized>
@@ -15,6 +15,8 @@
             <MudNavLink Href="login" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Password">Login</MudNavLink>
             </NotAuthorized>
     </AuthorizeView>
+    <MudNavLink Href="server" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.ElectricalServices">Server</MudNavLink>
+    <MudNavLink Href="client" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.RoomService">Client</MudNavLink>
 </MudNavMenu>
 
 

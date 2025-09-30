@@ -1,4 +1,6 @@
-using HighgeekNet.Blazor.Client.Services.Authorization;
+using HighgeekNet.Blazor.Client.Auth;
+using HighgeekNet.Common.Permissions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor.Services;
@@ -15,11 +17,18 @@ namespace HighgeekNet.Blazor.Client
     new HttpClient
     {
         BaseAddress = new Uri(builder.Configuration["FrontendUrl"] ??
-            "https://localhost:7146")
+            builder.HostEnvironment.BaseAddress)
     });
 
-            builder.Services.AddAuthorizationCore();
+            builder.Services.AddAuthorizationCore(options =>
+            {
+                options.AddPolicy("group.sa", policy => policy.Requirements.Add(new PermissionsAuthorizeAttribute("group.sa")));
+                options.AddPolicy("group.default", policy => policy.Requirements.Add(new PermissionsAuthorizeAttribute("group.default")));
+                options.AddPolicy("connectedaccount", policy => policy.Requirements.Add(new PermissionsAuthorizeAttribute("connectedaccount")));
+            });
             builder.Services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
+            builder.Services.AddSingleton<IAuthorizationHandler, ClientPermissionsAuthorizationHandler>();
+            builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionsPolicyProvider>();
             builder.Services.AddCascadingAuthenticationState();
 
             await builder.Build().RunAsync();

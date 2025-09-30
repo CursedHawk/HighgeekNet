@@ -50,7 +50,7 @@ namespace HighgeekNet.Blazor.Client.Helpers
 
                 Black = Colors.Cyan.Default,
 
-                TextPrimary = Colors.Gray.Lighten4,
+                TextPrimary = Colors.Gray.Darken4,
 
                 TextSecondary = Colors.Gray.Lighten1,
             }

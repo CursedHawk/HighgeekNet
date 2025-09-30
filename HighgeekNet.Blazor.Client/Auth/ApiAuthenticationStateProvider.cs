@@ -1,23 +1,22 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
-using System.Net;
+using Microsoft.JSInterop;
 using System.Net.Http.Json;
 using System.Security.Claims;
-using static System.Net.WebRequestMethods;
+using HighgeekNet.Blazor.Client.Extensions;
 
-namespace HighgeekNet.Blazor.Client.Services.Authorization
+namespace HighgeekNet.Blazor.Client.Auth
 {
-    public class ApiAuthenticationStateProvider(HttpClient http)
+    public class ApiAuthenticationStateProvider(HttpClient http, IJSRuntime js)
     : AuthenticationStateProvider
     {
         private readonly HttpClient _http = http;
-
-
+        private readonly IJSRuntime _js = js;
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
             try
             {
-                var userInfo = await _http.GetFromJsonAsync<UserInfo>("identity/account/me");
+                var userInfo = await _http.GetFromJsonAsync<UserInfo>("/identity/account/me");
                 if (userInfo is not null)
                 {
                     var claims = userInfo.Claims.Select(c => new Claim(c.Type, c.Value));
@@ -37,7 +36,7 @@ namespace HighgeekNet.Blazor.Client.Services.Authorization
 
         public async Task<bool> LoginAsync(string username, string password)
         {
-
+            await _http.AddXsrfHeaderAsync(_js);
             var response = await _http.PostAsJsonAsync("/identity/account/login",
                 new { Email = username, Password = password });
 
@@ -46,6 +45,7 @@ namespace HighgeekNet.Blazor.Client.Services.Authorization
 
         public async Task<bool> RegiserAsync(string username, string email, string password)
         {
+            await _http.AddXsrfHeaderAsync(_js);
             var response = await _http.PostAsJsonAsync("/identity/account/register",
                 new { Email = email, Password = password, Username = username });
             return response.IsSuccessStatusCode;
@@ -53,6 +53,7 @@ namespace HighgeekNet.Blazor.Client.Services.Authorization
 
         public async Task<bool> LogoutAsync()
         {
+            await _http.AddXsrfHeaderAsync(_js);
             var response = await _http.PostAsync("/identity/account/logout", null);
             return response.IsSuccessStatusCode;
         }

@@ -1,4 +1,5 @@
-﻿@inject AuthenticationStateProvider _authStateProvider
+﻿@using HighgeekNet.Blazor.Client.Auth
+@inject AuthenticationStateProvider _authStateProvider
 @inject HttpClient _http
 @inject NavigationManager _nav
 @inject ISnackbar _snack
@@ -18,7 +19,7 @@
         }
         else
         {
-            _snack.Add("Registration failed.", Severity.Error);
+            _snack.Add("Logout failed.", Severity.Error);
         }
     }
 }
