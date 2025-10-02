@@ -1,4 +1,3 @@
-using HighgeekNet.Blazor.Client.Services.Authorization;
 using HighgeekNet.Blazor.Components;
 using HighgeekNet.Blazor.Services.SignalR;
 using HighgeekNet.Common.Permissions;
@@ -7,6 +6,7 @@ using HighgeekNet.Common.Server.Data.Contexts;
 using HighgeekNet.Common.Server.Data.Models.mcwebapp_application;
 using HighgeekNet.Common.Server.Identity;
 using HighgeekNet.Common.Server.Permissions;
+using HighgeekNet.Common.Server.Services;
 using HighgeekNet.Common.Server.Services.Redis;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;

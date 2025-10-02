@@ -1,13 +1,12 @@
 ﻿using HighgeekNet.Common.Server.Config;
-using OpenApi.Highgeek.LuckPermsApi.Api;
-using OpenApi.Highgeek.LuckPermsApi.Client;
-using OpenApi.Highgeek.LuckPermsApi.Model;
+using HighgeekNet.OpenApi.LuckPermsApi.Api;
+using HighgeekNet.OpenApi.LuckPermsApi.Model;
 
-namespace HighgeekNet.Blazor.Client.Services.Authorization
+namespace HighgeekNet.Common.Server.Services
 {
     public class LuckPermsService
     {
-        private readonly Configuration config = new Configuration();
+        private readonly HighgeekNet.OpenApi.LuckPermsApi.Client.Configuration config = new HighgeekNet.OpenApi.LuckPermsApi.Client.Configuration();
         private readonly UsersApi _usersApi;
         private readonly GroupsApi _groupApi;
 

@@ -1,6 +1,6 @@
-﻿using HighgeekNet.Blazor.Client.Services.Authorization;
-using HighgeekNet.Common.Permissions;
+﻿using HighgeekNet.Common.Permissions;
 using HighgeekNet.Common.Server.Data.Models.mcwebapp_application;
+using HighgeekNet.Common.Server.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 
