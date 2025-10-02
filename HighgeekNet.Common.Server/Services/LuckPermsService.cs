@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using HighgeekNet.Common.Server.Config;
+﻿using HighgeekNet.Common.Server.Config;
 using OpenApi.Highgeek.LuckPermsApi.Api;
 using OpenApi.Highgeek.LuckPermsApi.Client;
 using OpenApi.Highgeek.LuckPermsApi.Model;
