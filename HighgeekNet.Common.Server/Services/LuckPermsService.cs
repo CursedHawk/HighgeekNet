@@ -9,10 +9,9 @@ namespace HighgeekNet.Blazor.Client.Services.Authorization
 {
     public class LuckPermsService
     {
-        private Configuration config = new Configuration();
-        public readonly UsersApi _usersApi;
-        public readonly GroupsApi _groupApi;
-
+        private readonly Configuration config = new Configuration();
+        private readonly UsersApi _usersApi;
+        private readonly GroupsApi _groupApi;
 
         public LuckPermsService()
         {
@@ -21,47 +20,37 @@ namespace HighgeekNet.Blazor.Client.Services.Authorization
             _groupApi = new GroupsApi(config);
         }
 
-        public async Task<UsersApi> GetUsersApiAsync()
+        public UsersApi GetUsersApi()
         {
-            //return new UsersApi(config);
             return _usersApi;
         }
 
-        public async Task<GroupsApi> GetGroupsApiAsync()
+        public GroupsApi GetGroupsApi()
         {
-            //return new GroupsApi(config);
             return _groupApi;
         }
 
         public async Task<string> GetUserUuidAsync(string username)
         {
-            var api = await GetUsersApiAsync();
-            var result = await api.GetUserLookupAsync(username);
-            api = null;
+            var result = await _usersApi.GetUserLookupAsync(username);
             return result.UniqueId.ToString();
         }
 
         public async Task<User> GetUserAsync(string uuid)
         {
-            var api = await GetUsersApiAsync();
-            var result = await api.GetUserAsync(new Guid(uuid));
-            api = null;
+            var result = await _usersApi.GetUserAsync(new Guid(uuid));
             return result;
         }
 
         public async Task<Group> GetGroupAsync(string groupname)
         {
-            var api = await GetGroupsApiAsync();
-            var result = await api.GetGroupAsync(groupname);
-            api = null;
+            var result = await _groupApi.GetGroupAsync(groupname);
             return result;
         }
 
         public async Task<List<string>> SearchForNodeInGroupsAsync(string permission)
         {
-            var api = await GetGroupsApiAsync();
-            var result = await api.GetGroupSearchAsync(permission);
-            api = null;
+            var result = await _groupApi.GetGroupSearchAsync(permission);
             List<string> list = new List<string>();
             foreach (var item in result)
             {
@@ -76,11 +65,9 @@ namespace HighgeekNet.Blazor.Client.Services.Authorization
             return list;
         }
 
-        public async Task<List<string>> SearchForNodeInUserAsync(string permission)
+        public async Task<List<string>> SearchForNodeInUsersAsync(string permission)
         {
-            var api = await GetUsersApiAsync();
-            var result = await api.GetUserSearchAsync(permission);
-            api = null;
+            var result = await _usersApi.GetUserSearchAsync(permission);
             List<string> list = new List<string>();
             foreach (var item in result)
             {
@@ -91,9 +78,7 @@ namespace HighgeekNet.Blazor.Client.Services.Authorization
 
         public async Task<bool> HasUserNode(string permission, string uuid)
         {
-            var api = await GetUsersApiAsync();
-            var result = await api.GetUserPermissionCheckAsync(new Guid(uuid), permission);
-            api = null;
+            var result = await _usersApi.GetUserPermissionCheckAsync(new Guid(uuid), permission);
             if (result.Node != null)
             { 
                 return result.Node.Value;
@@ -106,10 +91,15 @@ namespace HighgeekNet.Blazor.Client.Services.Authorization
 
         public async Task<bool> HasGroupNode(string permission, string groupName)
         {
-            var api = await GetGroupsApiAsync();
-            var result = await api.GetGroupPermissionCheckAsync(groupName, permission);
-            api = null;
-            return result.Node.Value;
+            var result = await _groupApi.GetGroupPermissionCheckAsync(groupName, permission);
+            if (result.Node != null)
+            {
+                return result.Node.Value;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public async Task<bool> HasPermissionAsync(string permission, string uuid)
@@ -149,21 +139,6 @@ namespace HighgeekNet.Blazor.Client.Services.Authorization
             List<string> userGroups = new List<string>();
             var user = await GetUserAsync(uuid);
             return user.ParentGroups;
-        }
-
-        public async Task<bool> CheckDefaultPerms(string permission)
-        {
-            var api = await GetGroupsApiAsync();
-            var group = await api.GetGroupAsync("default");
-            api = null;
-            foreach (var item in group.Nodes)
-            {
-                if(item.Key == permission)
-                {
-                    return item.Value;
-                }
-            }
-            return false;
         }
     }
 }
