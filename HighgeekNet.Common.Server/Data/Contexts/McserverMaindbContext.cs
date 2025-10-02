@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using HighgeekNet.Common.Server.Config;
+﻿using HighgeekNet.Common.Server.Config;
 using HighgeekNet.Common.Server.Data.Models.mcserver_maindb;
 using Microsoft.EntityFrameworkCore;
-using Pomelo.EntityFrameworkCore.MySql.Scaffolding.Internal;
 
 namespace HighgeekNet.Common.Server.Data.Contexts;
 
@@ -23,14 +20,6 @@ public partial class McserverMaindbContext : DbContext
     public virtual DbSet<DiscordAccount> DiscordAccounts { get; set; }
 
     public virtual DbSet<DiscordCode> DiscordCodes { get; set; }
-
-    public virtual DbSet<DiscordsrvAccount> DiscordsrvAccounts { get; set; }
-
-    public virtual DbSet<DiscordsrvCode> DiscordsrvCodes { get; set; }
-
-    public virtual DbSet<Easyauth> Easyauths { get; set; }
-
-    public virtual DbSet<EfmigrationsHistory> EfmigrationsHistories { get; set; }
 
     public virtual DbSet<LuckpermsAction> LuckpermsActions { get; set; }
 
@@ -66,24 +55,11 @@ public partial class McserverMaindbContext : DbContext
 
     public virtual DbSet<SrUrlSkin> SrUrlSkins { get; set; }
 
-    public virtual DbSet<VentureChat> VentureChats { get; set; }
-
     public virtual DbSet<VirtualInventory> VirtualInventories { get; set; }
 
     public virtual DbSet<WebMinecraftuser> WebMinecraftusers { get; set; }
 
-    public virtual DbSet<WebPlayerDatum> WebPlayerData { get; set; }
-
-    public virtual DbSet<WebServerstatus> WebServerstatuses { get; set; }
-
-    public virtual DbSet<Xconomy> Xconomies { get; set; }
-
-    public virtual DbSet<Xconomynon> Xconomynons { get; set; }
-
-    public virtual DbSet<Xconomyrecord> Xconomyrecords { get; set; }
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseMySql(ConfigProvider.GetConnectionString("MysqlMaindbConnection"), ServerVersion.Parse("10.11.2-mariadb"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -196,76 +172,6 @@ public partial class McserverMaindbContext : DbContext
             entity.Property(e => e.Uuid)
                 .HasMaxLength(36)
                 .HasColumnName("uuid");
-        });
-
-        modelBuilder.Entity<DiscordsrvAccount>(entity =>
-        {
-            entity.HasKey(e => e.Link).HasName("PRIMARY");
-
-            entity.ToTable("discordsrv__accounts");
-
-            entity.HasIndex(e => e.Discord, "accounts_discord_uindex").IsUnique();
-
-            entity.HasIndex(e => e.Uuid, "accounts_uuid_uindex").IsUnique();
-
-            entity.Property(e => e.Link)
-                .HasColumnType("int(11)")
-                .HasColumnName("link");
-            entity.Property(e => e.Discord)
-                .HasMaxLength(32)
-                .HasColumnName("discord");
-            entity.Property(e => e.Uuid)
-                .HasMaxLength(36)
-                .HasColumnName("uuid");
-        });
-
-        modelBuilder.Entity<DiscordsrvCode>(entity =>
-        {
-            entity.HasKey(e => e.Code).HasName("PRIMARY");
-
-            entity.ToTable("discordsrv__codes");
-
-            entity.HasIndex(e => e.Uuid, "codes_uuid_uindex").IsUnique();
-
-            entity.Property(e => e.Code)
-                .HasMaxLength(4)
-                .IsFixedLength()
-                .HasColumnName("code");
-            entity.Property(e => e.Expiration)
-                .HasColumnType("bigint(20)")
-                .HasColumnName("expiration");
-            entity.Property(e => e.Uuid)
-                .HasMaxLength(36)
-                .HasColumnName("uuid");
-        });
-
-        modelBuilder.Entity<Easyauth>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("easyauth");
-
-            entity.HasIndex(e => e.Uuid, "uuid").IsUnique();
-
-            entity.Property(e => e.Id)
-                .HasColumnType("int(11)")
-                .HasColumnName("id");
-            entity.Property(e => e.Data)
-                .HasColumnType("json")
-                .HasColumnName("data");
-            entity.Property(e => e.Uuid)
-                .HasMaxLength(36)
-                .HasColumnName("uuid");
-        });
-
-        modelBuilder.Entity<EfmigrationsHistory>(entity =>
-        {
-            entity.HasKey(e => e.MigrationId).HasName("PRIMARY");
-
-            entity.ToTable("__EFMigrationsHistory");
-
-            entity.Property(e => e.MigrationId).HasMaxLength(150);
-            entity.Property(e => e.ProductVersion).HasMaxLength(32);
         });
 
         modelBuilder.Entity<LuckpermsAction>(entity =>
@@ -667,26 +573,6 @@ public partial class McserverMaindbContext : DbContext
                 .HasColumnName("value");
         });
 
-        modelBuilder.Entity<VentureChat>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("VentureChat");
-
-            entity.Property(e => e.Id)
-                .HasColumnType("bigint(20) unsigned")
-                .HasColumnName("ID");
-            entity.Property(e => e.Channel).HasColumnType("text");
-            entity.Property(e => e.ChatTime).HasColumnType("text");
-            entity.Property(e => e.Name).HasMaxLength(36);
-            entity.Property(e => e.Server).HasColumnType("text");
-            entity.Property(e => e.Text).HasColumnType("text");
-            entity.Property(e => e.Type).HasColumnType("text");
-            entity.Property(e => e.Uuid)
-                .HasColumnType("text")
-                .HasColumnName("UUID");
-        });
-
         modelBuilder.Entity<VirtualInventory>(entity =>
         {
             entity.HasKey(e => e.InventoryUuid).HasName("PRIMARY");
@@ -734,121 +620,6 @@ public partial class McserverMaindbContext : DbContext
             entity.Property(e => e.PremiumUuid).HasColumnType("text");
             entity.Property(e => e.SkinHeadTexture).HasColumnType("text");
             entity.Property(e => e.SkinTexture).HasColumnType("text");
-        });
-
-        modelBuilder.Entity<WebPlayerDatum>(entity =>
-        {
-            entity.HasKey(e => e.Name)
-                .HasName("PRIMARY")
-                .HasAnnotation("MySql:IndexPrefixLength", new[] { 128 });
-
-            entity.ToTable("web_player_data");
-
-            entity.Property(e => e.Name)
-                .HasColumnType("text")
-                .HasColumnName("name");
-            entity.Property(e => e.Plandata).HasColumnName("plandata");
-            entity.Property(e => e.Uuid)
-                .HasColumnType("text")
-                .HasColumnName("uuid");
-        });
-
-        modelBuilder.Entity<WebServerstatus>(entity =>
-        {
-            entity.HasKey(e => e.Name)
-                .HasName("PRIMARY")
-                .HasAnnotation("MySql:IndexPrefixLength", new[] { 128 });
-
-            entity.ToTable("web_serverstatus");
-
-            entity.Property(e => e.Name)
-                .HasColumnType("longtext")
-                .HasColumnName("name");
-            entity.Property(e => e.Maxplayers).HasColumnName("maxplayers");
-            entity.Property(e => e.Online).HasColumnName("online");
-            entity.Property(e => e.Players).HasColumnName("players");
-            entity.Property(e => e.Playerslist).HasColumnName("playerslist");
-        });
-
-        modelBuilder.Entity<Xconomy>(entity =>
-        {
-            entity.HasKey(e => e.Uid).HasName("PRIMARY");
-
-            entity
-                .ToTable("xconomy")
-                .HasCharSet("utf8mb3")
-                .UseCollation("utf8mb3_general_ci");
-
-            entity.Property(e => e.Uid)
-                .HasMaxLength(50)
-                .HasColumnName("UID");
-            entity.Property(e => e.Balance)
-                .HasColumnType("double(20,2)")
-                .HasColumnName("balance");
-            entity.Property(e => e.Hidden)
-                .HasColumnType("int(5)")
-                .HasColumnName("hidden");
-            entity.Property(e => e.Player)
-                .HasMaxLength(50)
-                .HasColumnName("player");
-        });
-
-        modelBuilder.Entity<Xconomynon>(entity =>
-        {
-            entity.HasKey(e => e.Account).HasName("PRIMARY");
-
-            entity
-                .ToTable("xconomynon")
-                .HasCharSet("utf8mb3")
-                .UseCollation("utf8mb3_general_ci");
-
-            entity.Property(e => e.Account)
-                .HasMaxLength(50)
-                .HasColumnName("account");
-            entity.Property(e => e.Balance)
-                .HasColumnType("double(20,2)")
-                .HasColumnName("balance");
-        });
-
-        modelBuilder.Entity<Xconomyrecord>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity
-                .ToTable("xconomyrecord")
-                .HasCharSet("utf8mb3")
-                .UseCollation("utf8mb3_general_ci");
-
-            entity.Property(e => e.Id)
-                .HasColumnType("int(20)")
-                .HasColumnName("id");
-            entity.Property(e => e.Amount)
-                .HasColumnType("double(20,2)")
-                .HasColumnName("amount");
-            entity.Property(e => e.Balance)
-                .HasColumnType("double(20,2)")
-                .HasColumnName("balance");
-            entity.Property(e => e.Command)
-                .HasMaxLength(255)
-                .HasColumnName("command");
-            entity.Property(e => e.Comment)
-                .HasMaxLength(255)
-                .HasColumnName("comment");
-            entity.Property(e => e.Datetime)
-                .HasColumnType("datetime")
-                .HasColumnName("datetime");
-            entity.Property(e => e.Operation)
-                .HasMaxLength(50)
-                .HasColumnName("operation");
-            entity.Property(e => e.Player)
-                .HasMaxLength(50)
-                .HasColumnName("player");
-            entity.Property(e => e.Type)
-                .HasMaxLength(50)
-                .HasColumnName("type");
-            entity.Property(e => e.Uid)
-                .HasMaxLength(50)
-                .HasColumnName("uid");
         });
 
         OnModelCreatingPartial(modelBuilder);
