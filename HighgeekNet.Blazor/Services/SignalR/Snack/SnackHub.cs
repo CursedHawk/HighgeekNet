@@ -1,11 +1,11 @@
-﻿using HighgeekNet.Blazor.Client.Services.SignalR;
+﻿using HighgeekNet.Blazor.Client.Services.SignalR.Snack;
 using HighgeekNet.Common.Permissions;
 using HighgeekNet.Common.Server.Services.Redis;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using MudBlazor;
 
-namespace HighgeekNet.Blazor.Services.SignalR
+namespace HighgeekNet.Blazor.Services.SignalR.Snack
 {
     public class SnackHub : Hub<ISnackClient>, ISnackServer
     {

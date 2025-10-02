@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace HighgeekNet.Blazor.Services.SignalR
+namespace HighgeekNet.Blazor.Services.SignalR.Snack
 {
     [ApiController]
     [Route("api/get")]

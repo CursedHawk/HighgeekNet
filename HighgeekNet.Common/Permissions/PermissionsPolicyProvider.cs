@@ -15,6 +15,7 @@ namespace HighgeekNet.Common.Permissions
         }
         public Task<AuthorizationPolicy> GetDefaultPolicyAsync() =>
                                 FallbackPolicyProvider.GetDefaultPolicyAsync();
+
         public Task<AuthorizationPolicy?> GetFallbackPolicyAsync() =>
                                 FallbackPolicyProvider.GetFallbackPolicyAsync();
 

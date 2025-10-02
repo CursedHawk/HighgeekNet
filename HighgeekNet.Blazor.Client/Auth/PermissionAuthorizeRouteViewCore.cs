@@ -27,12 +27,6 @@ namespace HighgeekNet.Blazor.Client.Auth
             _authState = await AuthStateTask;
             var user = _authState.User;
 
-            if (!user.Identity?.IsAuthenticated ?? true)
-            {
-                _authorized = false;
-            }
-            else
-            {
                 // Built-in AuthorizeAttribute checks
                 bool passedAuthorize = true;
                 foreach (var attr in AuthorizeAttributes)
@@ -67,15 +61,9 @@ namespace HighgeekNet.Blazor.Client.Auth
                         passedCustom = false;
                         break;
                     }
-                    if (!user.HasClaim("Custom", custom.Permission))
-                    {
-                        passedCustom = false;
-                        break;
-                    }
                 }
 
                 _authorized = passedAuthorize && passedCustom;
-            }
 
             _authorizing = false;
         }

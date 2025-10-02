@@ -1,0 +1,9 @@
+﻿@using HighgeekNet.Blazor.Services.SignalR.Snack
+@inject ISnackService _snack
+
+<h3>Authorized</h3>
+<MudButton Class="clickable" OnClick="@(a => _snack.CallFromRedis(this, "hello from server"))">Click me</MudButton>
+
+@code {
+
+}

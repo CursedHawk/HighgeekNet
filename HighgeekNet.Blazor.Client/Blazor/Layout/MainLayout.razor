@@ -1,6 +1,8 @@
-﻿@using HighgeekNet.Blazor.Client.Services.SignalR
+﻿@using HighgeekNet.Blazor.Client.Services.SignalR.Permissions
+@using HighgeekNet.Blazor.Client.Services.SignalR.Snack
 @inherits LayoutComponentBase
 @inject SnackService _snackService
+@inject PermissionService _permissionService
 <MudThemeProvider Theme="@Helpers.ThemeHelper.CustomTheme" IsDarkMode="_isDarkMode" />
 <MudPopoverProvider />
 <MudDialogProvider />
@@ -40,6 +42,7 @@
     protected override async Task OnInitializedAsync()
     {
         _snackService.StartAsync();
+        _permissionService.StartAsync();
     }
 
     private void DrawerToggle()

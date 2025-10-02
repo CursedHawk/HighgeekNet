@@ -1,7 +1,6 @@
 ﻿@using HighgeekNet.Common.Permissions
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.Authorization
-@inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IAuthorizationService _authorizationService
 
 @if (IsAuthorized == null)
@@ -22,18 +21,14 @@ else
     [Parameter] public RenderFragment? NotAuthorized { get; set; }
     [Parameter] public RenderFragment? Loading { get; set; }
     [Parameter] public string? Permission { get; set; }
+    [CascadingParameter] private Task<AuthenticationState> AuthStateTask { get; set; } = default!;
 
     private bool? IsAuthorized;
 
     protected override async Task OnParametersSetAsync()
     {
-        var authState = await ((ApiAuthenticationStateProvider) AuthenticationStateProvider).GetAuthenticationStateAsync();
-        var user = authState.User;
-        if (user?.Identity?.IsAuthenticated != true)
-        {
-            IsAuthorized = false;
-            return;
-        }
+        var auth = await AuthStateTask;
+        var user = auth.User;
 
         if (!string.IsNullOrEmpty(Permission))
         {

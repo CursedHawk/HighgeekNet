@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 using MudBlazor;
 using System.Diagnostics;
 
-namespace HighgeekNet.Blazor.Client.Services.SignalR
+namespace HighgeekNet.Blazor.Client.Services.SignalR.Snack
 {
     public class SnackService : ISnackClient, IAsyncDisposable
     {
@@ -12,6 +12,9 @@ namespace HighgeekNet.Blazor.Client.Services.SignalR
         private readonly NavigationManager _navigationManager;
 
         private readonly ISnackbar _snack;
+
+        public bool IsConnected =>
+            _hubConnection?.State == HubConnectionState.Connected;
 
         public SnackService(NavigationManager navigationManager, ISnackbar snackbar)
         {
@@ -37,7 +40,6 @@ namespace HighgeekNet.Blazor.Client.Services.SignalR
             await _hubConnection.StartAsync();
         }
 
-        // Implement IChatClient
         public Task ReceiveSnack(string message, Severity severity)
         {
             _snack.Add(message, severity);
@@ -48,11 +50,6 @@ namespace HighgeekNet.Blazor.Client.Services.SignalR
         {
             return _hubConnection.InvokeAsync(nameof(ISnackServer.SendSnack), message, severity);
         }
-
-
-        public bool IsConnected =>
-            _hubConnection?.State == HubConnectionState.Connected;
-
 
         public async ValueTask DisposeAsync()
         {

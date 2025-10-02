@@ -2257,7 +2257,7 @@ namespace HighgeekNet.OpenApi.LuckPermsApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = await this.AsynchronousClient.GetAsync<PermissionCheckResult>("/group/{name}/permission-check", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.GetAsync<PermissionCheckResult>("/group/"+groupName+"/permission-check", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {

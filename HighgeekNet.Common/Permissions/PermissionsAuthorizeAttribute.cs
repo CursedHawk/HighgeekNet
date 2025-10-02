@@ -2,7 +2,6 @@
 
 namespace HighgeekNet.Common.Permissions
 {
-
     [AttributeUsage(AttributeTargets.All, AllowMultiple = true)]
     public class PermissionsAuthorizeAttribute : AuthorizeAttribute, IAuthorizationRequirement, IAuthorizationRequirementData
     {

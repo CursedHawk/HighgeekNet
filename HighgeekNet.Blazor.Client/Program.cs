@@ -1,5 +1,6 @@
 using HighgeekNet.Blazor.Client.Auth;
-using HighgeekNet.Blazor.Client.Services.SignalR;
+using HighgeekNet.Blazor.Client.Services.SignalR.Permissions;
+using HighgeekNet.Blazor.Client.Services.SignalR.Snack;
 using HighgeekNet.Common.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -22,6 +23,7 @@ namespace HighgeekNet.Blazor.Client
     });
 
             builder.Services.AddScoped<SnackService>();
+            builder.Services.AddSingleton<PermissionService>();
 
             builder.Services.AddAuthorizationCore(options =>
             {

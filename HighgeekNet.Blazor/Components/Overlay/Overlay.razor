@@ -1,0 +1,31 @@
+﻿@using HighgeekNet.Common.Permissions
+@using Microsoft.AspNetCore.Components.Authorization
+
+<CascadingAuthenticationState>
+    <HighgeekNet.Blazor.Client.Auth.PermissionAuthorizeView Permission="highgeek.web.show.unlinked">
+        <Authorized>
+            <div class="overlay">
+                <h1>Authorized</h1>
+                <h1>@RendererInfo.Name</h1>
+                <Authorized/>
+            </div>
+        </Authorized>
+        <NotAuthorized>
+            <div class="overlay">
+                <h1>NotAuthorized</h1>
+                <h1>@RendererInfo.Name</h1>
+            </div>
+        </NotAuthorized>
+        <Loading>
+            <div class="overlay">
+                <h1>Loading...</h1>
+                <h1>@RendererInfo.Name</h1>
+            </div>
+        </Loading>
+    </HighgeekNet.Blazor.Client.Auth.PermissionAuthorizeView>
+</CascadingAuthenticationState>
+
+
+@code {
+
+}

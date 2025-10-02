@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using MudBlazor;
 
-namespace HighgeekNet.Blazor.Client.Services.SignalR
+namespace HighgeekNet.Blazor.Client.Services.SignalR.Snack
 {
     public interface ISnackClient
     {
