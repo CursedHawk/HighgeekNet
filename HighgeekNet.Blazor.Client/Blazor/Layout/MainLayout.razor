@@ -1,5 +1,6 @@
-﻿@inherits LayoutComponentBase
-
+﻿@using HighgeekNet.Blazor.Client.Services.SignalR
+@inherits LayoutComponentBase
+@inject SnackService _snackService
 <MudThemeProvider Theme="@Helpers.ThemeHelper.CustomTheme" IsDarkMode="_isDarkMode" />
 <MudPopoverProvider />
 <MudDialogProvider />
@@ -34,7 +35,11 @@
     protected override void OnInitialized()
     {
         base.OnInitialized();
+    }
 
+    protected override async Task OnInitializedAsync()
+    {
+        _snackService.StartAsync();
     }
 
     private void DrawerToggle()

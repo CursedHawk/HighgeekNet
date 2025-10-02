@@ -1,11 +1,13 @@
 using HighgeekNet.Blazor.Client.Services.Authorization;
 using HighgeekNet.Blazor.Components;
+using HighgeekNet.Blazor.Services.SignalR;
 using HighgeekNet.Common.Permissions;
 using HighgeekNet.Common.Server.Config;
 using HighgeekNet.Common.Server.Data.Contexts;
 using HighgeekNet.Common.Server.Data.Models.mcwebapp_application;
 using HighgeekNet.Common.Server.Identity;
 using HighgeekNet.Common.Server.Permissions;
+using HighgeekNet.Common.Server.Services.Redis;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
@@ -37,15 +39,23 @@ namespace HighgeekNet.Blazor
             // Add MudBlazor services
             builder.Services.AddMudServices();
             builder.Services.AddHttpClient();
+            builder.Services.AddControllers();
 
             // Add services to the container.
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents()
                 .AddInteractiveWebAssemblyComponents();
 
-            builder.Services.AddCascadingAuthenticationState();
+            builder.Services.AddSignalR();
+            builder.Services.AddSingleton<RedisListenerService>();
+            builder.Services.AddHostedService(
+                provider => provider.GetRequiredService<RedisListenerService>());
+            builder.Services.AddSingleton<IRedisUpdateService, RedisUpdateService>();
 
-            // Identity (no Razor Pages)
+            builder.Services.AddSingleton<ISnackService, SnackService>();
+
+            // Identity
+            builder.Services.AddCascadingAuthenticationState();
             builder.Services.AddIdentityCore<ApplicationUser>(options =>
             {
                 options.Password.RequireNonAlphanumeric = false;
@@ -62,8 +72,9 @@ namespace HighgeekNet.Blazor
                 .AddCookie(IdentityConstants.ApplicationScheme,
         options =>
         {
-            options.LoginPath = "/login";
-            options.LogoutPath = "/logout";
+            options.LoginPath = new PathString("/login");
+            options.LogoutPath = new PathString("/logout");
+            options.AccessDeniedPath = new PathString("/denied");
             options.Cookie.Name = ".AspNet.SharedCookie";
 
             if (builder.Environment.IsProduction())
@@ -105,6 +116,12 @@ namespace HighgeekNet.Blazor
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            
+            
+            using (var scope = app.Services.CreateScope())
+            {
+                var snackService = scope.ServiceProvider.GetRequiredService<ISnackService>();
+            }
 
             app.UseHttpsRedirection();
 
@@ -121,6 +138,9 @@ namespace HighgeekNet.Blazor
                 .AddInteractiveWebAssemblyRenderMode()
                 .AddAdditionalAssemblies(typeof(Client._Imports).Assembly);
 
+            app.MapControllers();
+
+            app.MapHub<SnackHub>("/hubs/snack");
 
             app.Run();
         }

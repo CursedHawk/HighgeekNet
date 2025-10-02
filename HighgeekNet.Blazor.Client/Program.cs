@@ -1,4 +1,5 @@
 using HighgeekNet.Blazor.Client.Auth;
+using HighgeekNet.Blazor.Client.Services.SignalR;
 using HighgeekNet.Common.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -12,13 +13,15 @@ namespace HighgeekNet.Blazor.Client
         static async Task Main(string[] args)
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
+
             builder.Services.AddMudServices();
             builder.Services.AddScoped(sp =>
     new HttpClient
     {
-        BaseAddress = new Uri(builder.Configuration["FrontendUrl"] ??
-            builder.HostEnvironment.BaseAddress)
+        BaseAddress = new Uri(builder.Configuration["FrontendUrl"] ?? builder.HostEnvironment.BaseAddress)
     });
+
+            builder.Services.AddScoped<SnackService>();
 
             builder.Services.AddAuthorizationCore(options =>
             {
