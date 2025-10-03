@@ -1,6 +1,4 @@
-using HighgeekNet.Blazor.Client.Auth;
 using HighgeekNet.Blazor.Components;
-using HighgeekNet.Blazor.Services.Auth;
 using HighgeekNet.Blazor.Services.SignalR.Permissions;
 using HighgeekNet.Blazor.Services.SignalR.Snack;
 using HighgeekNet.Common.Permissions;
@@ -12,8 +10,6 @@ using HighgeekNet.Common.Server.Permissions;
 using HighgeekNet.Common.Server.Services;
 using HighgeekNet.Common.Server.Services.Redis;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
